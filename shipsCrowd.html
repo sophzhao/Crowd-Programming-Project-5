@@ -1,0 +1,164 @@
+<!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
+<html>
+<head>
+<title>Example Game Like Thing</title>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.11.0/jquery.min.js"></script>
+<script src="mturk.js"></script>
+<div id="pay_score"></div>
+<script>
+var pixelX = 500;
+var pixelY = 500;
+var piecex = (pixelX/2)-25; //coordinates of ship
+var piecey = pixelY-50;
+var rows = 10;
+var cols = 10;
+var offset = 0;
+var cellX = 0; //coordinates of game pieces
+var cellY = 0;
+var rewardCounter = 0;
+var gameOver = "false";
+var falling = [];
+var lastRow = [];
+var board =
+  [[0,0,0,1,0,0,0,0,0,0],
+   [0,0,0,0,0,0,0,0,1,0],
+   [0,0,0,0,0,0,0,0,1,0],
+   [0,0,0,0,0,0,0,0,1,0],
+   [1,1,1,0,0,0,1,1,0,0],
+   [0,0,0,0,0,0,0,0,0,0],
+   [0,0,0,0,0,0,1,0,0,1],
+   [0,0,0,0,0,0,1,0,0,0],
+   [0,0,0,0,0,0,1,0,0,0],
+   [0,0,0,0,0,0,1,0,0,0],
+   [1,1,1,0,0,0,1,0,0,0],
+   [0,0,0,0,0,0,1,0,0,0],
+   [0,0,0,0,0,0,0,0,0,0]
+   ];
+$(document).ready(function() {
+  var gameboard = $("<div id='gameboard'></div>");
+  $(document.body).append(gameboard);
+  var piece = $("<div class='piece'></div>");
+  $(gameboard).append(piece);
+  // var bluepiece = $("<div class='bluepiece'></div>");
+  // var bluepiece2 = $("<div class='bluepiece'></div>");
+  // $(gameboard).append(bluepiece2);
+  $(".piece").css("left", piecex + "px");
+  $(".piece").css("top", piecey + "px");
+  calculateBoard();
+
+  // for (var row=0; row<rows; row++) {
+  //   for (var col=0; col<cols; col++) {
+  //     //if (board[(row+offset)%board.length][col] == 1) { //%rows so that it draws from top if hits last row
+  //     if (board[row+offset][col] == 1) { 
+  //       var bluepiece = $("<div class='bluepiece'></div>");
+  //       $(gameboard).append(bluepiece);        
+  //       cellX = row*50; 
+  //       cellY = col*50;
+  //       $(bluepiece).css("left", cellY + "px");
+  //       $(bluepiece).css("top", cellX + "px");  
+  //     }
+  //   }
+  // }
+
+  $(document).keydown(function(e) {
+    if(e.keyCode==37) {
+      if (gameOver == "false" && lastRow.indexOf(piecex-50) == -1 && lastRow.indexOf(piecex-25) == -1) {
+        // left arrow clicked
+        piecex -= 25;
+        if (piecex < 0) {
+          piecex = 450;
+        }
+      }
+    } else if(e.keyCode == 39) {
+      if (gameOver == "false" && lastRow.indexOf(piecex+50) == -1 && lastRow.indexOf(piecex+25) == -1 ) {  
+        // right arrow clicked
+        piecex += 25;
+        piecex = piecex % 475;
+      }
+    }
+    $(".piece").css("left", piecex + "px");
+  });
+
+  function calculateBoard() {
+    var gameboard = $("<div id='gameboard'></div>");
+    $(document.body).append(gameboard);
+    $(gameboard).append(piece);
+    for (var row=0; row<rows; row++) {
+      for (var col=0; col<cols; col++) {
+      //if (board[(row+offset)%board.length][col] == 1) { //%rows so that it draws from top if hits last row
+      if (board[((row+offset)%board.length)][col] == 1) { 
+        var bluepiece = $("<div class='bluepiece'></div>");     
+        $(gameboard).append(bluepiece);
+        cellX = row*50; 
+        cellY = col*50;
+        $(bluepiece).css("left", cellY + "px");
+        $(bluepiece).css("top", cellX + "px"); 
+        if (row == rows-2) {
+          falling.push(cellY);
+        } else if (row == rows-1) {
+          lastRow.push(cellY);
+        } 
+      }
+      }
+    }
+  }
+
+  function checkFalling() {
+    if (falling.indexOf(piecex) > -1) {
+      clearInterval(intervalOn);
+      gameOver = "true";
+      alert("Game over! You've lost, but you've earned $" + rewardCounter.toFixed(2));
+    }
+  }
+
+  var intervalOn = setInterval(function() {
+    falling = [];
+    lastRow = [];
+    calculateBoard();
+    checkFalling();
+    rewardCounter+=0.01;
+    var element = document.getElementById("pay_score");
+    element.innerHTML = "$"+rewardCounter.toFixed(2);
+    if (offset==0){
+      offset = board.length-1;
+    } else {
+      offset = offset-1;
+    }
+  }, 500);
+})
+
+</script>
+<style>
+#gameboard {
+  background-color: gray;
+  width: 500px;
+  height: 500px;
+  position: absolute;
+}
+
+.bluepiece {
+  background-color: #6699ff;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+.piece {
+  background-color: #AAF;
+  width: 50px;
+  height: 50px;
+  position: absolute;
+  left: 0px;
+  top: 0px;
+}
+
+.pay_score {
+  font-size: 250%;
+}
+</style>
+</head>
+<body>
+</body>
+</html>
