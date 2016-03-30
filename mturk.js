@@ -35,7 +35,7 @@ $(document).ready(function () {
     // Add a new hidden input element with name="assignmentId" that
     // with assignmentId as its value.
     var aid_input = $("<input type='hidden' name='assignmentId' value='" + aid + "'>").appendTo($(form_selector));
-    var playingTime = $("<input type='hidden' id='timeSpent' name='timeSpent' value='0'>").appendTo($(form_selector));
+    var playingTime = $("<input type='hidden' id='playingTime' name='playingTime' value='0'>").appendTo($(form_selector));
     var rewardCollected = $("<input type='hidden' id='rewardCollected' name='rewardCollected' value='0'>").appendTo($(form_selector));
 
     // Make sure the submit form's method is POST
