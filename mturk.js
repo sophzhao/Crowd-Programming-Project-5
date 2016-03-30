@@ -12,8 +12,10 @@
 // selector used by jquery to identify your form
 var form_selector = "#mturk_form";
 
-// function for getting URL parameters
-function gup(name) {
+//  Turkify the captioning page.
+$(document).ready(function () {
+  // function for getting URL parameters
+  function gup(name) {
   name = name.replace(/[\[]/,"\\\[").replace(/[\]]/,"\\\]");
   var regexS = "[\\?&]"+name+"=([^&#]*)";
   var regex = new RegExp(regexS);
@@ -21,10 +23,7 @@ function gup(name) {
   if(results == null)
     return "";
   else return unescape(results[1]);
-}
-
-//  Turkify the captioning page.
-$(document).ready(function () {
+  }
   // is assigntmentId is a URL parameter
   if((aid = gup("assignmentId"))!="" && $(form_selector).length>0) {
 
@@ -36,6 +35,8 @@ $(document).ready(function () {
     // Add a new hidden input element with name="assignmentId" that
     // with assignmentId as its value.
     var aid_input = $("<input type='hidden' name='assignmentId' value='" + aid + "'>").appendTo($(form_selector));
+    var playingTime = $("<input type='hidden' id='timeSpent' name='timeSpent' value='0'>").appendTo($(form_selector));
+    var rewardCollected = $("<input type='hidden' id='rewardCollected' name='rewardCollected' value='0'>").appendTo($(form_selector));
 
     // Make sure the submit form's method is POST
     $(form_selector).attr('method', 'POST');
