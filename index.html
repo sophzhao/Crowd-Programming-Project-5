@@ -22,15 +22,15 @@ var gameOver = false;
 var falling = [];
 var lastRow = [];
 var board =
-  [[0,0,0,1,1,0,0,0,1,1],
+  [[0,0,0,1,1,0,0,1,1,1],
    [0,0,0,0,1,0,0,0,0,0],
-   [0,0,0,0,1,0,1,0,0,0],
+   [0,0,0,0,1,0,0,0,0,0],
    [0,0,0,0,0,0,1,0,0,0],
    [1,1,1,0,0,0,1,0,0,0],
    [0,0,0,0,0,1,1,0,0,0],
-   [0,0,0,0,0,0,0,0,0,0],
-   [0,0,0,1,1,0,0,0,1,0],
+   [0,0,0,0,0,0,1,0,0,0],
    [0,0,0,0,0,0,0,0,1,0],
+   [0,0,0,1,1,0,0,0,1,0],
    [0,0,0,0,0,0,0,0,1,0],
    [1,1,0,0,0,0,0,0,0,0],
    [0,0,0,0,0,0,0,0,0,0]
@@ -90,7 +90,7 @@ $(document).ready(function() {
   }
 
   function checkFalling() {
-    if (falling.indexOf(piecex) > -1 || rewardCounter == 2 * 10000) {
+    if (falling.indexOf(piecex) > -1 || rewardCounter == 2.00) {
       clearInterval(intervalOn);
       gameOver = true;
       window.alert("Game over! You've lost, but you've earned $" + rewardCounter.toFixed(2));
@@ -105,11 +105,11 @@ $(document).ready(function() {
     falling = [];
     lastRow = [];
     calculateBoard();
+    checkFalling();
     rewardCounter+=0.001;
     playing_time += 1000;
     var element = document.getElementById("pay_score");
     element.innerHTML = "$"+rewardCounter.toFixed(3);
-    checkFalling();
     if (offset==0){
       offset = board.length-1;
     } else {
