@@ -30,6 +30,20 @@ var board =
    [0,0,0,1,1,0,0,0,1,0],
    [0,0,0,0,0,0,0,0,1,0],
    [1,1,0,0,0,0,0,0,0,0],
+   [0,0,0,0,0,0,0,0,0,0],      
+   [0,0,0,1,1,0,0,1,1,1],
+   [0,0,0,0,1,0,0,0,0,0],
+   [0,0,0,0,1,0,0,0,0,0]
+   ];
+var initialBoard = 
+  [[0,0,0,0,0,0,1,0,0,0],
+   [1,1,1,0,0,0,1,0,0,0],
+   [0,0,0,0,0,1,1,0,0,0],
+   [0,0,0,0,0,0,1,0,0,0],
+   [0,0,0,0,0,0,0,0,1,0],
+   [0,0,0,1,1,0,0,0,1,0],
+   [0,0,0,0,0,0,0,0,1,0],
+   [1,1,0,0,0,0,0,0,0,0],
    [0,0,0,0,0,0,0,0,0,0],
    [0,0,0,0,0,0,0,0,0,0],
    [0,0,0,0,0,0,0,0,0,0],
@@ -46,7 +60,7 @@ $(document).ready(function() {
   $(gameboard).append(piece);
   $(".piece").css("left", piecex + "px");
   $(".piece").css("top", piecey + "px");
-  calculateBoard();
+  calculateInitial();
 
   $(document).keydown(function(e) {
     if(e.keyCode==37) {
@@ -66,6 +80,32 @@ $(document).ready(function() {
     }
     $(".piece").css("left", piecex + "px");
   });
+
+  function calculateInitial() {
+    var gameboard = $("<div id='gameboard'></div>");
+    $(document.body).append(gameboard);
+    $(gameboard).append(piece);
+    for (var row=0; row<rows; row++) {
+      for (var col=0; col<cols; col++) {
+      if (initialBoard[((row+offset)%initialBoard.length)][col] == 1) { 
+        var bluepiece = $("<div class='bluepiece'></div>");     
+        $(gameboard).append(bluepiece);
+        cellX = row*50; 
+        cellY = col*50;
+        //check if about to fall on the piece
+        if (row == rows-2) {
+          falling.push(cellY);
+        } else if (row == rows-1) {
+          lastRow.push(cellY);
+        } 
+        //draw the bluepiece
+        $(bluepiece).css("left", cellY + "px");
+        $(bluepiece).css("top", cellX + "px"); 
+      }
+      }
+    }
+  }
+  }
 
   function calculateBoard() {
     var gameboard = $("<div id='gameboard'></div>");
